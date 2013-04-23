@@ -1,14 +1,4 @@
-#Grab new code
-git pull
-#compile new code
-/bin/play-2.1.1/play clean compile stage
-#kill web server if running
-if [ -f RUNNING_PID ];
+if [ -f target/start ];
 then
-    echo "Server running. Killing it first."
-    kill -9 `cat RUNNING_PID`
-    rm -rf RUNNING_PID
+    target/start &
 fi
-#Launch updated web server
-target/start &
-
