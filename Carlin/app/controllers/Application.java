@@ -39,7 +39,7 @@ public class Application extends Controller {
 		int totalCarlinTweets = 0;
 		int highestCarlinCount = 0;
 		double carlinIndex = 0;
-		
+		 
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String name = (String)values.get("name")[0];
         Promise<Response> response =  WS.url("https://api.twitter.com/1.1/statuses/user_timeline.json")
