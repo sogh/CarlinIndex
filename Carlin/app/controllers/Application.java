@@ -38,8 +38,8 @@ public class Application extends Controller {
         String topTweet = "";
 		int totalCarlinTweets = 0;
 		int highestCarlinCount = 0;
-		double carlinIndex = 0;
-		 
+		int carlinIndex = 0;
+		
         final Map<String, String[]> values = request().body().asFormUrlEncoded();
         String name = (String)values.get("name")[0];
         Promise<Response> response =  WS.url("https://api.twitter.com/1.1/statuses/user_timeline.json")
@@ -50,7 +50,7 @@ public class Application extends Controller {
         		    
         JsonNode node = response.get().asJson();
         if(node != null)
-        {
+        { 
         	List<JsonNode> tweets = node.findValues("text");
         	if(tweets != null)
         	{
@@ -82,7 +82,7 @@ public class Application extends Controller {
         		if(tweets.size() > 0)
         		{
         			Logger.info(totalCarlinTweets + "/" + tweets.size());
-        			carlinIndex = (double)((double)totalCarlinTweets / (double)tweets.size());
+        			carlinIndex = (int)((double)totalCarlinTweets / (double)tweets.size() * 100);
         		}
         	}
         }
@@ -95,12 +95,13 @@ public class Application extends Controller {
         {
             newUser.save();
         }
-        List<User> users = new Model.Finder(String.class, User.class).where().orderBy("name DESC").findList();
+        List<User> users = new Model.Finder(String.class, User.class).where().orderBy("carlinIndex DESC").findList();
         Logger.info(toJson(users).asText());
         if(users.size() > 10)
         {
         	users = users.subList(0, 10);
         }
+        Logger.info(toJson(users).asText());
         return ok(toJson(users));
     }
 }
